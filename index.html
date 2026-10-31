@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#08111f" />
+    <title>KPI Pilot — 목표와 실적</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="#top" aria-label="KPI Pilot 홈"><span class="brand-mark">↗</span><span>KPI <em>PILOT</em></span></a>
+        <div class="topbar-right"><span class="mode-badge"><span class="dot"></span>샘플 모드</span><span class="updated">마지막 업데이트 <strong id="updatedAt">방금 전</strong></span></div>
+      </header>
+
+      <section class="hero" id="top">
+        <div><p class="eyebrow">PERFORMANCE / 2026</p><h1>팀의 목표와 실적,<br /><span>한눈에 선명하게.</span></h1><p class="hero-copy">월별, 부서별 KPI를 빠르게 비교하고<br class="desktop-only" /> 다음 액션을 결정하세요.</p></div>
+        <div class="hero-aside"><div class="pulse-ring"><span>Q4</span></div><p>운영 대시보드<br /><strong>October focus</strong></p></div>
+      </section>
+
+      <section class="filter-panel" aria-label="KPI 필터">
+        <div class="filter-heading"><span class="section-kicker">VIEW</span><h2>필터</h2></div>
+        <div class="filters">
+          <label>기준 월<select id="monthFilter" aria-label="기준 월"></select></label>
+          <label>부서<select id="departmentFilter" aria-label="부서"></select></label>
+          <button class="reset-button" id="resetFilters" type="button">필터 초기화 <span>↻</span></button>
+        </div>
+        <p class="filter-summary" id="filterSummary"></p>
+      </section>
+
+      <section class="metrics-grid" aria-label="KPI 요약">
+        <article class="metric-card accent"><div class="metric-label">목표 합계 <span class="info">i</span></div><div class="metric-value" id="targetTotal">—</div><div class="metric-foot">선택 조건 기준</div></article>
+        <article class="metric-card"><div class="metric-label">실적 합계 <span class="trend" id="trendLabel">+0.0%</span></div><div class="metric-value" id="actualTotal">—</div><div class="metric-foot">전월 대비</div></article>
+        <article class="metric-card"><div class="metric-label">달성률 <span class="info">i</span></div><div class="metric-value" id="achievementRate">—</div><div class="metric-foot" id="rateFoot">목표 대비 실적</div></article>
+      </section>
+
+      <section class="insight-grid">
+        <article class="panel chart-panel"><div class="panel-header"><div><p class="section-kicker">AT A GLANCE</p><h2>목표 vs 실적</h2></div><span class="panel-note" id="chartNote">단위: 건</span></div><div class="bar-chart" id="barChart" aria-label="목표와 실적 비교 차트"></div><div class="legend"><span><i class="legend-target"></i>목표</span><span><i class="legend-actual"></i>실적</span></div></article>
+        <article class="panel callout-panel"><p class="section-kicker">QUICK READ</p><div id="calloutIcon" class="callout-icon">✦</div><h2 id="calloutTitle">가장 앞서가는 팀</h2><p id="calloutText">데이터를 불러오는 중입니다.</p><div class="callout-divider"></div><p class="callout-hint">숫자는 선택한 월·부서 필터에 따라 즉시 바뀝니다.</p></article>
+      </section>
+
+      <section class="evidence-section"><div class="section-header"><div><p class="section-kicker">EVIDENCE TABLE</p><h2>근거표</h2><p class="subcopy">입력된 KPI 항목별 목표와 실적을 확인하세요.</p></div><button class="primary-button" id="addKpi" type="button"><span>＋</span> KPI 입력</button></div><div class="table-wrap"><table><thead><tr><th>부서</th><th>지표명</th><th>목표</th><th>실적</th><th>달성률</th><th>상태</th></tr></thead><tbody id="evidenceBody"></tbody></table><div class="empty-state" id="emptyState" hidden><div class="empty-icon">⌁</div><h3>조건에 맞는 데이터가 없어요</h3><p>다른 월이나 부서를 선택하거나 새 KPI를 입력해 보세요.</p></div><div class="error-state" id="errorState" hidden><div class="error-icon">!</div><h3>데이터를 불러오지 못했어요</h3><p>잠시 후 다시 시도해 주세요.</p><button class="text-button" id="retryButton" type="button">다시 시도</button></div></div></section>
+
+      <footer><span>KPI PILOT / SAMPLE DATASET</span><span>실제 DB 연결 전 화면 검증용</span></footer>
+    </main>
+
+    <dialog id="entryDialog"><form method="dialog" id="entryForm"><div class="dialog-head"><div><p class="section-kicker">NEW ENTRY</p><h2>KPI 입력</h2></div><button class="close-button" value="cancel" aria-label="닫기">×</button></div><p class="dialog-copy">샘플 모드에서는 현재 화면에만 반영되며 실제 DB에 저장되지 않습니다.</p><div class="form-grid"><label>월<input type="month" id="entryMonth" required /></label><label>부서<select id="entryDepartment" required></select></label><label class="span-two">지표명<input type="text" id="entryMetric" placeholder="예: 신규 고객 수" required /></label><label>목표<input type="number" id="entryTarget" min="0" step="1" placeholder="0" required /></label><label>실적<input type="number" id="entryActual" min="0" step="1" placeholder="0" required /></label></div><div class="dialog-actions"><button class="secondary-button" value="cancel">취소</button><button class="primary-button" id="saveEntry" value="default">화면에 추가</button></div></form></dialog>
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
